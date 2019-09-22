@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "ffmpeg-binaries": "^4.0.0",
+    "node-fetch": "^2.6.0",
+    "node-opus": "^0.3.2",
+    "ytdl-core": "^0.29.7"
   }
 }
