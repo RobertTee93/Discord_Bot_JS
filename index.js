@@ -5,8 +5,6 @@ const {
 } = require('./config.json');
 const fs = require('fs')
 
-const test = "test"
-
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 const client = new Discord.Client();
