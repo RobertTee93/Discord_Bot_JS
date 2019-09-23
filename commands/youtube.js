@@ -1,8 +1,10 @@
 const ytdl = require('ytdl-core');
 
 module.exports = {
-    name: 'play',
+    name: 'playr',
     description: 'Play a youtube url.',
+    args: true,
+    usage: '<link>',
     execute(message, args) {
         
         const { voiceChannel } = message.member;
@@ -13,7 +15,7 @@ module.exports = {
 
             voiceChannel.join().then(connection => {
                 console.log("STARTING STREAM");
-                const stream = ytdl('https://www.youtube.com/watch?v=RhU9MZ98jxo', {
+                const stream = ytdl(`${args[0]}`, {
                     filter: 'audioonly'
                 });
 
