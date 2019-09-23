@@ -22,10 +22,12 @@ module.exports = {
 
                 const dispatcher = connection.playStream(stream);
 
-                dispatcher.on('end', () => voiceChannel.leave())
-                .on('error', error => {
+                dispatcher.on('error', error => {
                     console.log(error)
                 });
+
+                dispatcher.on('end', () => voiceChannel.leave())
+                
             })
             .catch(err => console.log("ERROR", err))
 
