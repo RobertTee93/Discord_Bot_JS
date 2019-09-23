@@ -16,9 +16,12 @@ module.exports = {
                 const stream = ytdl('https://www.youtube.com/watch?v=RhU9MZ98jxo', {
                     filter: 'audioonly'
                 });
-                const dispatcher = connection.playStream(stream);
 
-                dispatcher.on('end', () => voiceChannel.leave());
+                setTimeout(() => {
+                    const dispatcher = connection.playStream(stream);
+
+                    dispatcher.on('end', () => voiceChannel.leave());
+                }, 500)
             });
 
             process.on('unhandledRejection', error => console.error('Uncaught Promise Rejection', error));
