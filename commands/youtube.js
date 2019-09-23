@@ -19,7 +19,10 @@ module.exports = {
 
                 const dispatcher = connection.playStream(stream);
 
-                dispatcher.on('end', () => voiceChannel.leave());
+                dispatcher.on('end', () => voiceChannel.leave())
+                .on('error', error => {
+                    console.log(error)
+                });
             });
 
             process.on('unhandledRejection', error => console.error('Uncaught Promise Rejection', error));
