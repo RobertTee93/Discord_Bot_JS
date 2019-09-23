@@ -17,11 +17,9 @@ module.exports = {
                     filter: 'audioonly'
                 });
 
-                setTimeout(() => {
-                    const dispatcher = connection.playStream(stream);
+                const dispatcher = connection.playStream(stream);
 
-                    dispatcher.on('end', () => voiceChannel.leave());
-                }, 500)
+                dispatcher.on('end', () => voiceChannel.leave());
             });
 
             process.on('unhandledRejection', error => console.error('Uncaught Promise Rejection', error));
