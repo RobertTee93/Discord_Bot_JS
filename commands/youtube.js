@@ -12,6 +12,7 @@ module.exports = {
             }
 
             voiceChannel.join().then(connection => {
+                console.log("STARTING STREAM");
                 const stream = ytdl('https://www.youtube.com/watch?v=9ClYy0MxsU0', {
                     filter: 'audioonly'
                 });
