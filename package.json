@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/uws": "^11.149.1",
     "discord.js": "^11.5.1",
     "ffmpeg-binaries": "^4.0.0",
     "node-fetch": "^2.6.0",
