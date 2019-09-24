@@ -21,11 +21,8 @@ module.exports = {
                     quality: 'highestaudio'
                 });
 
-                console.log("STREAM", stream)
-
                 const dispatcher = connection.playStream(stream);
 
-                console.log("DISPATCHER", dispatcher)
 
                 dispatcher.on('error', error => {
                     console.log(error)
