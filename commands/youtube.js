@@ -16,7 +16,7 @@ module.exports = {
 
             voiceChannel.join().then(connection => {
                 console.log("STARTING STREAM");
-                const stream = ytdl(`${args[0]}`, {
+                const stream = ytdl(args[0], {
                     filter: 'audioonly',
                     quality: 'highestaudio'
                 });
