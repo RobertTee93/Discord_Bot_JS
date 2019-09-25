@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const {
     prefix,
-    token
+    token,
+    youtubeKey
 } = require('./config.json');
 const fs = require('fs')
 
@@ -26,7 +27,8 @@ client.music = require("discord.js-musicbot-addon");
 client.music.start(client, {
     // Set the api key used for YouTube.
     // This is required to run the bot.
-    youtubeKey: "AIzaSyDDZ7x4VugpL61quHSWkcAlkmH0KyHy4-s"
+    youtubeKey: youtubeKey,
+    maxQueueSize: 0
 });
 
 client.on('message', message => {
