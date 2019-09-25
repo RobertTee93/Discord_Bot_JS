@@ -21,6 +21,14 @@ client.once('ready', () => {
     console.log('Ready!');
 });
 
+client.music = require("discord.js-musicbot-addon");
+
+client.music.start(client, {
+    // Set the api key used for YouTube.
+    // This is required to run the bot.
+    youtubeKey: "AIzaSyDDZ7x4VugpL61quHSWkcAlkmH0KyHy4-s"
+});
+
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
