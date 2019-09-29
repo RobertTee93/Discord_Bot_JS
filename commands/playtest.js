@@ -8,7 +8,7 @@ const {
 } = require('googleapis');
 
 module.exports = {
-    name: 'play',
+    name: 'playtest',
     description: 'Play/queue music when given a youtube url.',
     cooldown: 5,
     execute(message, args, queue, serverQueue) {
@@ -28,22 +28,22 @@ module.exports = {
         let searchArgs = args.join("+")
 
         youtube.search.list({
-                part: 'snippet',
-                q: searchArgs
-            })
-            .then(data => {
-                let searchResults = data.data.items
+            part: 'snippet',
+            q: searchArgs
+        })
+        .then(data => {
+            let searchResults = data.data.items
 
-                let searchItem = searchResults[0].id.videoId
+            let searchItem = searchResults[0].id.videoId
 
-                if (args[0].includes("https://www.youtube.com")) {
-                    searchItem = args[0]
-                }
+            if(args[0].includes("https://www.youtube.com")){
+                searchItem = args[0]
+            }
 
-                handleSingleSong(searchItem)
+            handleSingleSong(searchItem)
 
-            })
-            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
 
         function play(guild, song) {
             const serverQueue = queue.get(guild.id);
@@ -66,7 +66,7 @@ module.exports = {
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
 
-        function handleSingleSong(searchItem) {
+        function handleSingleSong(searchItem){
             ytdl.getInfo(searchItem)
                 .then(songInfo => {
 
@@ -110,3 +110,5 @@ module.exports = {
         }
     }
 }
+
+
