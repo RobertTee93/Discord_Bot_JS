@@ -29,7 +29,8 @@ module.exports = {
 
         youtube.search.list({
                 part: 'snippet',
-                q: searchArgs
+                q: searchArgs,
+                type: "video"
             })
             .then(data => {
                 let searchResults = data.data.items
