@@ -25,25 +25,34 @@ module.exports = {
             auth: youtubeKey
         });
 
-        let searchArgs = args.join("+")
+        if(args[0].includes("playlist")){
 
-        youtube.search.list({
-            part: 'snippet',
-            q: searchArgs
-        })
-        .then(data => {
-            let searchResults = data.data.items
+            handlePlaylist(args[0])
 
-            let searchItem = searchResults[0].id.videoId
+        } else {
 
-            if(args[0].includes("https://www.youtube.com")){
-                searchItem = args[0]
-            }
+            let searchArgs = args.join("+")
 
-            handleSingleSong(searchItem)
+            youtube.search.list({
+                    part: 'snippet',
+                    q: searchArgs,
+                    type: "video"
+                })
+                .then(data => {
+                    let searchResults = data.data.items
 
-        })
-        .catch(err => console.log(err))
+                    let searchItem = searchResults[0].id.videoId
+
+                    if (args[0].includes("https://www.youtube.com")) {
+                        searchItem = args[0]
+                    }
+
+                    handleSingleSong(searchItem)
+
+                })
+                .catch(err => console.log(err))
+
+        }
 
         function play(guild, song) {
             const serverQueue = queue.get(guild.id);
@@ -54,7 +63,9 @@ module.exports = {
                 return;
             }
 
-            const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+            const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {
+                highWaterMark: "1000"
+            })
                 .on('end', () => {
                     console.log('Music ended!');
                     serverQueue.songs.shift();
@@ -66,7 +77,7 @@ module.exports = {
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         }
 
-        function handleSingleSong(searchItem){
+        function handleSingleSong(searchItem) {
             ytdl.getInfo(searchItem)
                 .then(songInfo => {
 
@@ -108,7 +119,9 @@ module.exports = {
 
                 })
         }
+
+        function handlePlaylist(args){
+            return
+        }
     }
 }
-
-
