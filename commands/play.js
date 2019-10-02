@@ -66,7 +66,7 @@ module.exports = {
             }
 
             const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {
-                    highWaterMark: "1000"
+                    filter: "audioonly"
                 })
                 .on('end', () => {
                     console.log('Music ended!');
