@@ -194,7 +194,6 @@ module.exports = {
                 }
             } else {
                 serverQueue.songs = [...serverQueue.songs, ...songs]
-                console.log(serverQueue.songs);
                 return message.channel.send(`${songs.length} songs have been added to the queue!`);
             }
 
