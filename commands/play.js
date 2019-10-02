@@ -65,6 +65,8 @@ module.exports = {
                 return;
             }
 
+            console.log(song)
+
             const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {
                     filter: "audioonly"
                 })
