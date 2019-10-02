@@ -25,26 +25,36 @@ module.exports = {
             auth: youtubeKey
         });
 
-        let searchArgs = args.join("+")
+        if (args[0].includes("playlist")) {
 
-        youtube.search.list({
-                part: 'snippet',
-                q: searchArgs,
-                type: "video"
-            })
-            .then(data => {
-                let searchResults = data.data.items
+            let playlistID = args[0].split("=")
 
-                let searchItem = searchResults[0].id.videoId
+            handlePlaylistSearch(playlistID, [], "first")
 
-                if (args[0].includes("https://www.youtube.com")) {
-                    searchItem = args[0]
-                }
+        } else {
 
-                handleSingleSong(searchItem)
+            let searchArgs = args.join("+")
 
-            })
-            .catch(err => console.log(err))
+            youtube.search.list({
+                    part: 'snippet',
+                    q: searchArgs,
+                    type: "video"
+                })
+                .then(data => {
+                    let searchResults = data.data.items
+
+                    let searchItem = searchResults[0].id.videoId
+
+                    if (args[0].includes("https://www.youtube.com")) {
+                        searchItem = args[0]
+                    }
+
+                    handleSingleSong(searchItem)
+
+                })
+                .catch(err => console.log(err))
+
+        }
 
         function play(guild, song) {
             const serverQueue = queue.get(guild.id);
@@ -55,7 +65,9 @@ module.exports = {
                 return;
             }
 
-            const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+            const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {
+                    highWaterMark: "1000"
+                })
                 .on('end', () => {
                     console.log('Music ended!');
                     serverQueue.songs.shift();
@@ -108,6 +120,82 @@ module.exports = {
                     }
 
                 })
+        }
+
+        async function handlePlaylistSearch(playlistID, songs, nextPage) {
+
+            if (nextPage === "first") {
+                let data = await youtube.playlistItems.list({
+                    part: 'snippet',
+                    playlistId: playlistID[1],
+                    maxResults: 50
+                })
+
+                songs = [...songs, ...data.data.items]
+
+                handlePlaylistSearch(playlistID, songs, data.data.nextPageToken)
+
+            } else if (nextPage) {
+                let data = await youtube.playlistItems.list({
+                    part: 'snippet',
+                    playlistId: playlistID[1],
+                    pageToken: nextPage,
+                    maxResults: 50
+                })
+
+                songs = [...songs, ...data.data.items]
+
+                handlePlaylistSearch(playlistID, songs, data.data.nextPageToken)
+            } else {
+
+                console.log(songs.length)
+
+                handlePlaylistPlay(songs)
+
+            }
+        }
+
+        function handlePlaylistPlay(songs) {
+
+            songs = songs.map(song => {
+                return {
+                    title: song.snippet.title,
+                    url: `https://www.youtube.com/watch?v=${song.snippet.resourceId.videoId}`
+                }
+            })
+
+            if (!serverQueue) {
+                const queueContruct = {
+                    textChannel: message.channel,
+                    voiceChannel: voiceChannel,
+                    connection: null,
+                    songs: [],
+                    volume: 5,
+                    playing: true,
+                };
+
+                queue.set(message.guild.id, queueContruct);
+
+                queueContruct.songs = [...songs]
+
+                try {
+                    voiceChannel.join()
+                        .then((connection) => {
+                            queueContruct.connection = connection;
+                            play(message.guild, queueContruct.songs[0]);
+                            return message.channel.send(`${queueContruct.songs.length} songs have been added to the queue!`)
+                        })
+                } catch (err) {
+                    console.log(err);
+                    queue.delete(message.guild.id);
+                    return message.channel.send(err);
+                }
+            } else {
+                serverQueue.songs = [...serverQueue.songs, ...songs]
+                console.log(serverQueue.songs);
+                return message.channel.send(`${songs.length} songs have been added to the queue!`);
+            }
+
         }
     }
 }
