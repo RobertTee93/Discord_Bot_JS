@@ -22,7 +22,7 @@ module.exports = {
             }
           })
           .then(res => {
-              console.log("1", res.text.length)
+              console.log(res.text.length)
     
               let matches = res.text
     
@@ -34,8 +34,7 @@ module.exports = {
                   }
               }
     
-              console.log(matchesArray[24].children[0].children[0].children[1].children[0].children[0])
-              console.log("-----", matchesArray[23].children[0].children[1].children[0].children[0])
+            //   console.log(matchesArray[24].children[1].children[0].children[1].children[1].attribs.title)
     
               sortedMatches = matchesArray.map(match => {
     
@@ -44,6 +43,7 @@ module.exports = {
                 let homeScore = null
                 let awayTeam = null
                 let awayScore = null
+                let minsPlayed = ""
     
                 if(match.children[0].children[2].children[0].children[0].children[0].attribs){
                     homeTeam = match.children[0].children[0].children[0].children[0].children[0].attribs.title
@@ -54,6 +54,13 @@ module.exports = {
                     startTime = match.children[0].children[1].children[0].children[0].data
                     awayTeam = match.children[0].children[2].children[0].children[0].children[0].data
                     homeTeam = match.children[0].children[0].children[0].children[0].children[0].data
+                }
+
+
+            
+
+                if(minsPlayed){
+                    console.log(minsPlayed)
                 }
     
                 return {
@@ -66,19 +73,24 @@ module.exports = {
                   
               })
     
-              if(team){
-                sortedMatches = sortedMatches.filter(match => match.homeTeam.toLowerCase().includes(team.toLowerCase()) || match.awayTeam.toLowerCase().includes(team.toLowerCase()))
-              }
+            //   if(team){
+            //     sortedMatches = sortedMatches.filter(match => match.homeTeam.toLowerCase().includes(team.toLowerCase()) || match.awayTeam.toLowerCase().includes(team.toLowerCase()))
+            //   }
     
-              if(sortedMatches.length > 0){
-                sortedMatchesScores = sortedMatches.map(match => {
-                    return `\n⚽️${match.startTime} ${match.homeTeam} ${match.homeScore} ${match.awayScore} ${match.awayTeam}`
-                })
-                message.channel.send(`\`\`\`${sortedMatchesScores}\`\`\``);
-              } else {
-                console.log("NO MATCHES FOUND")
-                message.channel.send(`No matches found!`);
-              }
+            //   if(sortedMatches.length > 0){
+            //     sortedMatchesScores = sortedMatches.map(match => {
+            //         return `\n⚽️${match.startTime} ${match.homeTeam} ${match.homeScore} ${match.awayScore} ${match.awayTeam}`
+            //     })
+
+            //     if(sortedMatchesScores.join("").length > 2000){
+
+            //     }
+
+            //     message.channel.send(`\`\`\`${sortedMatchesScores}\`\`\``);
+            //   } else {
+            //     console.log("NO MATCHES FOUND")
+            //     message.channel.send(`No matches found!`);
+            //   }
               
           })
         })
