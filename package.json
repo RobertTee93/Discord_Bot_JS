@@ -13,7 +13,7 @@
     "discord.js": "^11.5.1",
     "googleapis": "^43.0.0",
     "html-to-json": "^0.6.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "node-opus": "^0.3.2",
     "ytdl-core": "^0.29.7"
   }
